@@ -2,12 +2,13 @@
   <dataSource type="JdbcDataSource" driver="org.postgresql.Driver" url="jdbc:postgresql://localhost:5433/mycollection_solr" user="postgres" password="abcABC123"/> 
   <document> 
     <entity name="user" query="select * from users"
-      deltaQuery="SELECT id FROM public.users where last_modify > '${dih.last_index_time}'">
+      deltaImportQuery="select * from users where id = ${dataimporter.delta.id}"
+      deltaQuery="SELECT id FROM public.users where last_modify > '${dataimporter.last_index_time}'">
       <field column="fullname" name="name"/> 
       <entity name="item"
         query="SELECT name FROM public.items where user_id = ${user.id};"
-        deltaImportQuery="select name from items where user_id = ${dih.user.id}"
-        deltaQuery="select user_id from items where last_modify > '${dih.last_index_time}'" >
+        deltaImportQuery="select name from items where user_id = ${dataimporter.delta.id}"
+        deltaQuery="select id from items where last_modify > '${dataimporter.last_index_time}'" >
         <field column="name" name="items" />
       </entity>
     </entity>
